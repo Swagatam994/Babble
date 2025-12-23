@@ -12,7 +12,8 @@ export const arcjetProtection = async (req, res, next) => {
           .json({ message: "Rate limit exceeded . please try again" });
       } else if (decision.reason.isBot()) {
         return res.status(429).json({ message: "Bot access denied" });
-      } else {
+       }
+       else {
         return res
           .status(429)
           .json({ message: "Accesss denied by security policy" });
