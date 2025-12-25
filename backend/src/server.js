@@ -9,7 +9,7 @@ import { connectDB } from "./lib/db.js";
 const app = express();
 
 // Parse JSON and URL-encoded bodies before route handlers
-app.use(express.json()); // populate req.body for JSON
+app.use(express.json({limit:"5mb"})); // populate req.body for JSON
 app.use(cors({origin:ENV.CLIENT_URL,credentials:true}));
 app.use(express.urlencoded({ extended: true })); // populate req.body for form submissions
 
