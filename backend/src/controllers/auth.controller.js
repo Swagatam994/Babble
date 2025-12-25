@@ -41,6 +41,14 @@ export const signup = async (req, res) => {
     if (newUser) {
       const savedUser = await newUser.save();
       generateToken(savedUser._id, res);
+
+      res.status(201).json({
+        _id: newUser._id,
+        fullName: newUser.fullName,
+        email: newUser.email,
+        profilePic: newUser.profilePic,
+      });
+      
       try {
         await senderWelcomeEmail(
           savedUser.email,
@@ -50,13 +58,6 @@ export const signup = async (req, res) => {
       } catch (error) {
         console.log("Failed to send welcome email", error);
       }
-
-      return res.status(201).json({
-        _id: newUser._id,
-        fullName: newUser.fullName,
-        email: newUser.email,
-        profilePic: newUser.profilePic,
-      });
     } else {
       return res.status(400).json({ message: "Invalid user data" });
     }
@@ -100,22 +101,21 @@ export const logout = (_, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { profilePic } = req.body;
-    if (!profilePic)
-      return res.status(400).json({ message: "Profile pic is required" });
+    if (!profilePic) return res.status(400).json({ message: "Profile pic is required" });
 
     const userId = req.user._id;
 
     const uploadResponse = await cloudinary.uploader.upload(profilePic);
 
-    await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       userId,
       { profilePic: uploadResponse.secure_url },
       { new: true }
     );
 
-    res.status(200).json(updateUser);
+    res.status(200).json(updatedUser);
   } catch (error) {
-    console.log("Error in update profile :", error);
+    console.log("Error in update profile:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };

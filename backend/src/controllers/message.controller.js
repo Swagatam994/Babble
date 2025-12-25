@@ -4,8 +4,8 @@ import cloudinary from "cloudinary";
 
 export const getAllContacts = async (req, res) => {
   try {
-    const loggedInUserId = req.User._id;
-    const filteredUsers = await User.find({
+ const loggedInUserId = req.user._id;
+     const filteredUsers = await User.find({
       _id: { $ne: loggedInUserId },
     }).select("-password");
 
