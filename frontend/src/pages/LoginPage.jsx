@@ -70,6 +70,16 @@ function LoginPage() {
                       "Sign In"
                     )}
                   </button>
+
+                  <button onClick={()=>window.open("http://localhost:3000/api/auth/google","_self")} className="auth-btn" type="submit" disabled={isLoggingIn}>
+                    {isLoggingIn ? (
+                      <LoaderIcon className="w-full h-5 animate-spin text-center" />
+                    ) : (
+                      "Sign In with google"
+                    )}
+                  </button>
+
+                  
                 </form>
 
                 <div className="mt-6 text-center">
